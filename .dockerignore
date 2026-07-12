@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+output/
+.browsers/
+*.log
+config.local.yaml
+config.yaml
+cookies/
+.env
+chrome_profile/
+chrome_profile_docker/
+chrome_profile*/
+debug_*.py
+discover_profile.py
+chromedriver.log

@@ -47,6 +47,7 @@ class ScraperConfig:
     scraping_batch_size: int = 20
     scraping_start_date_days: int = 2
     api_mode: bool = False
+    scraping_batch_delay_seconds: int = 0
 
     # Browser / stealth
     headless: bool = False
@@ -130,6 +131,8 @@ class ScraperConfig:
             cfg.scraping_platform = platform
         if batch_size := os.getenv("SCRAPING_BATCH_SIZE"):
             cfg.scraping_batch_size = int(batch_size)
+        if batch_delay := os.getenv("SCRAPING_BATCH_DELAY_SECONDS"):
+            cfg.scraping_batch_delay_seconds = int(batch_delay)
         if start_days := os.getenv("SCRAPING_START_DATE_DAYS"):
             cfg.scraping_start_date_days = int(start_days)
         if api_mode := os.getenv("SCRAPING_API_MODE"):
@@ -177,6 +180,8 @@ class ScraperConfig:
             self.scraping_platform = platform
         if batch_size := os.getenv("SCRAPING_BATCH_SIZE"):
             self.scraping_batch_size = int(batch_size)
+        if batch_delay := os.getenv("SCRAPING_BATCH_DELAY_SECONDS"):
+            self.scraping_batch_delay_seconds = int(batch_delay)
         if start_days := os.getenv("SCRAPING_START_DATE_DAYS"):
             self.scraping_start_date_days = int(start_days)
         if api_mode := os.getenv("SCRAPING_API_MODE"):

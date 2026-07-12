@@ -76,6 +76,7 @@ def build_config(args: argparse.Namespace) -> ScraperConfig:
             "scraping_api_url",
             "scraping_platform",
             "scraping_batch_size",
+            "scraping_batch_delay_seconds",
             "scraping_start_date_days",
             "api_mode",
         ):
@@ -243,6 +244,15 @@ def main() -> int:
                     )
                 except Exception as api_exc:
                     logging.warning("Could not fetch session details: %s", api_exc)
+                
+                if b_idx < len(batches) and cfg.scraping_batch_delay_seconds > 0:
+                    logging.info(
+                        "Batch %d/%d complete. Waiting %d seconds before starting next batch...",
+                        b_idx,
+                        len(batches),
+                        cfg.scraping_batch_delay_seconds
+                    )
+                    time.sleep(cfg.scraping_batch_delay_seconds)
             
             logging.info("Flask API Scraping Flow Complete.")
             return 0
