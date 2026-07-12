@@ -1,0 +1,7 @@
+selenium>=4.15.0
+undetected-chromedriver>=3.5.5
+selenium-stealth>=1.0.6
+fake-useragent>=1.5.1
+PyYAML>=6.0.1
+python-dotenv>=1.0.0
+setuptools>=68.0.0

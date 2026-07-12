@@ -1,0 +1,15 @@
+# Docker defaults — credentials via mounted config.local.yaml or env vars
+
+headless: false
+chrome_binary: "/usr/bin/google-chrome-stable"
+chromedriver_path: "/usr/local/bin/chromedriver"
+user_data_dir: null
+output_dir: "/app/output"
+
+delay_min: 2.0
+delay_max: 6.0
+scroll_pause_min: 0.8
+scroll_pause_max: 2.0
+max_comment_scroll_rounds: 40
+max_idle_rounds: 5
+max_retries: 2

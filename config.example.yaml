@@ -1,0 +1,36 @@
+# Copy to config.yaml and fill in your values
+
+profile_url: "https://www.instagram.com/YOUR_USERNAME/"
+# Or scrape specific post(s) directly:
+# post_urls:
+#   - "https://www.instagram.com/p/SHORTCODE/"
+post_limit: 10
+output_dir: "./output"
+
+# Recommended: use your real Chrome profile OR exported cookies
+# user_data_dir: "/home/YOU/.config/google-chrome"
+# chrome_profile: "Default"
+# cookies_file: "./cookies/instagram_cookies.json"
+
+# Optional residential proxy
+# proxy: "http://user:pass@proxy.example.com:8080"
+
+# Optional login fallback (cookies/profile preferred)
+# instagram_username: ""
+# instagram_password: ""
+
+headless: false
+rotate_fingerprint: true
+
+delay_min: 3
+delay_max: 12
+scroll_pause_min: 0.8
+scroll_pause_max: 2.5
+max_comment_scroll_rounds: 80
+max_idle_rounds: 6
+max_retries: 3
+challenge_wait_seconds: 120
+
+# Auto-detected if present
+chrome_binary: "./.browsers/chrome-linux64/chrome"
+chromedriver_path: "./.browsers/chromedriver-linux64/chromedriver"

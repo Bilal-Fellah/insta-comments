@@ -1,0 +1,14 @@
+# Local secrets — never commit
+instagram_username: "skwappw618@gmail.com"
+instagram_password: "lolololo618"
+profile_url: "https://www.instagram.com/skwappw6181/"
+post_limit: 3
+headless: true
+delay_min: 2.0
+delay_max: 5.0
+scroll_pause_min: 0.8
+scroll_pause_max: 2.0
+max_comment_scroll_rounds: 40
+max_idle_rounds: 5
+user_data_dir: "./chrome_profile"
+output_dir: "./output"
