@@ -221,10 +221,6 @@ def main() -> int:
                                 
                             comments_to_insert.append(comment_payload)
                     
-                    if not comments_to_insert:
-                        logging.info("No comments collected for post in %s. Skipping insert.", json_path_str)
-                        continue
-                    
                     logging.info("Submitting %d comments to Flask API.", len(comments_to_insert))
                     insert_res = client.insert_comments(session_id, comments_to_insert)
                     logging.info(
@@ -254,6 +250,13 @@ def main() -> int:
                     )
                     time.sleep(cfg.scraping_batch_delay_seconds)
             
+            try:
+                logging.info("Marking session %s as completed.", session_id)
+                comp_res = client.complete_session(session_id)
+                logging.info("Session completion result: %s", comp_res)
+            except Exception as api_exc:
+                logging.warning("Could not complete session: %s", api_exc)
+
             logging.info("Flask API Scraping Flow Complete.")
             return 0
         else:

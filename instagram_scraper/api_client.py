@@ -116,3 +116,35 @@ class ScrapingApiClient:
         except Exception as exc:
             logger.error("Failed to fetch session details from API: %s", exc)
             raise
+
+    def complete_session(self, session_id: str) -> dict[str, Any]:
+        """Mark a scraping session as completed.
+        
+        POST /api/scraping/sessions/{session_id}/complete
+        """
+        url = f"{self.base_url}/api/scraping/sessions/{session_id}/complete"
+        logger.info("Completing session via API: %s", url)
+        try:
+            resp = requests.post(url, headers=self.headers, timeout=30)
+            if resp.status_code == 400:
+                logger.error("API Validation Error (400): %s", resp.text)
+                resp.raise_for_status()
+            elif resp.status_code == 401:
+                logger.error("API Error (401): Invalid or missing API key.")
+                resp.raise_for_status()
+            elif resp.status_code == 429:
+                logger.error("API Error (429): Rate limit exceeded.")
+                resp.raise_for_status()
+            elif resp.status_code != 200:
+                logger.error("API Error (%d): %s", resp.status_code, resp.text)
+                resp.raise_for_status()
+                
+            res_payload = resp.json()
+            if not res_payload.get("success"):
+                raise RuntimeError(f"API returned success=False: {res_payload.get('error')}")
+                
+            return res_payload.get("data") or {}
+        except Exception as exc:
+            logger.error("Failed to complete session via API: %s", exc)
+            raise
+
