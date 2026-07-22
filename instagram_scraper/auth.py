@@ -12,8 +12,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from core.human import human_delay, human_type
+
 from .config import ScraperConfig
-from .human import human_delay, human_type
 
 logger = logging.getLogger(__name__)
 
@@ -118,8 +119,8 @@ def _find_login_fields(driver):
 
 
 def login_with_credentials(driver, config: ScraperConfig) -> None:
-    if not config.instagram_username or not config.instagram_password:
-        raise ValueError("instagram_username and instagram_password required for login")
+    if not config.login_username or not config.login_password:
+        raise ValueError("login_username and login_password required for login")
 
     driver.get("https://www.instagram.com/accounts/login/")
     human_delay(3, 6)
@@ -131,9 +132,9 @@ def login_with_credentials(driver, config: ScraperConfig) -> None:
     if not user_input or not pass_input:
         raise RuntimeError("Could not locate Instagram login form fields")
 
-    human_type(user_input, config.instagram_username)
+    human_type(user_input, config.login_username)
     human_delay(0.5, 1.5)
-    human_type(pass_input, config.instagram_password)
+    human_type(pass_input, config.login_password)
     human_delay(0.8, 2.0)
 
     # Submit via password field or login button
@@ -194,7 +195,7 @@ def ensure_session(driver, config: ScraperConfig) -> None:
         logger.info("Authenticated session detected")
         return
 
-    if config.instagram_username and config.instagram_password:
+    if config.login_username and config.login_password:
         logger.info("Attempting credential login")
         login_with_credentials(driver, config)
         if is_logged_in(driver):

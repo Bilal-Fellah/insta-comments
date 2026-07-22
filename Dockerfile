@@ -4,10 +4,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     DEBIAN_FRONTEND=noninteractive \
     IN_DOCKER=1 \
+    PLATFORM=instagram \
+    CHROME_BINARY=/usr/bin/google-chrome-stable \
     IG_HEADLESS=0 \
     IG_CHROME_BINARY=/usr/bin/google-chrome-stable \
     IG_CHROMEDRIVER_PATH=/usr/local/bin/chromedriver \
     IG_USER_DATA_DIR=none \
+    FB_HEADLESS=0 \
+    FB_CHROME_BINARY=/usr/bin/google-chrome-stable \
+    FB_CHROMEDRIVER_PATH=/usr/local/bin/chromedriver \
+    FB_USER_DATA_DIR=none \
     DBUS_SESSION_BUS_ADDRESS=/dev/null \
     HOME=/tmp
 
@@ -61,13 +67,18 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY core ./core
 COPY instagram_scraper ./instagram_scraper
-COPY scrape_instagram.py config.docker.yaml docker-entrypoint.sh ./
+COPY facebook_scraper ./facebook_scraper
+COPY scrape.py scrape_instagram.py scrape_facebook.py ./
+COPY config.docker.yaml config.facebook.docker.yaml docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 RUN mkdir -p /app/output
 
 VOLUME ["/app/output"]
 
+# Select platform with -e PLATFORM=facebook (default instagram). With no CMD
+# args the entrypoint picks the matching config.<platform>.docker.yaml.
 ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD ["--config", "config.docker.yaml"]
+CMD []

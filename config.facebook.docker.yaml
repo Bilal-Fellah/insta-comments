@@ -1,0 +1,19 @@
+# Docker defaults for Facebook — credentials via mounted config or env vars.
+# Used automatically when the container runs with PLATFORM=facebook.
+
+headless: false
+chrome_binary: "/usr/bin/google-chrome-stable"
+chromedriver_path: "/usr/local/bin/chromedriver"
+user_data_dir: null
+output_dir: "/app/output"
+
+# Provide a mounted cookies file (must include c_user and xs):
+# cookies_file: "/app/cookies/facebook_cookies.json"
+
+delay_min: 2.0
+delay_max: 6.0
+scroll_pause_min: 0.8
+scroll_pause_max: 2.0
+max_comment_scroll_rounds: 40
+max_idle_rounds: 5
+max_retries: 2

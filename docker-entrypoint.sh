@@ -23,5 +23,17 @@ if [ ! -f "/tmp/.X${DISPLAY_NUM}-lock" ]; then
     exit 1
 fi
 
-# Run the scraper; Xvfb is cleaned up when container exits
-exec python scrape_instagram.py "$@"
+# Run the scraper; Xvfb is cleaned up when container exits.
+PLATFORM="${PLATFORM:-instagram}"
+
+# With no extra args, default to the platform's docker config.
+if [ "$#" -eq 0 ]; then
+    if [ "$PLATFORM" = "facebook" ]; then
+        set -- --config config.facebook.docker.yaml
+    else
+        set -- --config config.docker.yaml
+    fi
+fi
+
+echo "[entrypoint] platform=${PLATFORM} args: $*"
+exec python scrape.py --platform "$PLATFORM" "$@"

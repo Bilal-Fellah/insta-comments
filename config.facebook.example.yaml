@@ -1,0 +1,38 @@
+# Copy to config.facebook.yaml and fill in your values.
+# Run with:  python scrape.py --platform facebook --config config.facebook.yaml
+
+# Scrape recent posts from a page/profile:
+profile_url: "https://www.facebook.com/YOUR_PAGE/"
+# Or scrape specific post(s) directly (posts / permalink.php / videos / reel / watch):
+# post_urls:
+#   - "https://www.facebook.com/YOUR_PAGE/posts/pfbid0XXXX/"
+#   - "https://www.facebook.com/permalink.php?story_fbid=123&id=456"
+post_limit: 10
+output_dir: "./output"
+
+# Recommended: exported logged-in cookies (must include c_user and xs).
+cookies_file: "./cookies/facebook_cookies.json"
+
+# Optional login fallback (cookies preferred). Historical keys
+# facebook_username/facebook_password are also accepted.
+# login_username: ""
+# login_password: ""
+
+# Optional residential proxy
+# proxy: "http://user:pass@proxy.example.com:8080"
+
+headless: false
+rotate_fingerprint: true
+
+delay_min: 3
+delay_max: 12
+scroll_pause_min: 0.8
+scroll_pause_max: 2.5
+max_comment_scroll_rounds: 80
+max_idle_rounds: 6
+max_retries: 3
+challenge_wait_seconds: 120
+
+# Auto-detected if present
+chrome_binary: "./.browsers/chrome-linux64/chrome"
+chromedriver_path: "./.browsers/chromedriver-linux64/chromedriver"

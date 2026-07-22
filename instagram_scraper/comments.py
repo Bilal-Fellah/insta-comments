@@ -9,11 +9,12 @@ from typing import Any
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
+from core.human import human_delay, human_scroll, random_mouse_wander
+
 from .auth import dismiss_cookie_banners
 from .api import get_media_comments
 from .config import ScraperConfig
-from .human import human_delay, human_scroll, random_mouse_wander
-from .interceptors import drain_captured_responses, extract_comments_from_payload, parse_json_body
+from .interceptor_config import drain_captured_responses, extract_comments_from_payload, parse_json_body
 from .page_parser import extract_comments_from_page_source
 from .profile import extract_post_metadata_from_page
 

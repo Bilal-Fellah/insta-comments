@@ -7,6 +7,8 @@ output/
 *.log
 config.local.yaml
 config.yaml
+config.facebook.local.yaml
+config.facebook.yaml
 cookies/
 .env
 chrome_profile/

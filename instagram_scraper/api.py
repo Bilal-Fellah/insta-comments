@@ -6,45 +6,36 @@ import json
 import logging
 from typing import Any
 
-from .human import human_delay
+from core.browser_fetch import browser_fetch as _browser_fetch
+from core.human import human_delay
+
+from .interceptor_config import IG_APP_ID
 
 logger = logging.getLogger(__name__)
 
-IG_APP_ID = "936619743392459"
 
-FETCH_JS = """
-const [url, method, body] = arguments;
-const cb = arguments[arguments.length - 1];
-const csrf = (document.cookie.match(/csrftoken=([^;]+)/) || [])[1];
-const headers = {
-  'X-IG-App-ID': '%s',
-  'X-Requested-With': 'XMLHttpRequest',
-  'X-ASBD-ID': '359341',
-  'Accept': '*/*',
-  'Referer': window.location.href,
-};
-if (csrf) headers['X-CSRFToken'] = csrf;
-fetch(url, { method: method || 'GET', headers, credentials: 'include', body: body || undefined })
-  .then(async (r) => ({ status: r.status, text: await r.text(), contentType: r.headers.get('content-type') || '' }))
-  .then(cb)
-  .catch((e) => cb({ status: 0, text: String(e), contentType: '' }));
-""" % IG_APP_ID
+def _ig_headers(driver) -> dict[str, str]:
+    csrf = None
+    try:
+        for c in driver.get_cookies():
+            if c.get("name") == "csrftoken":
+                csrf = c.get("value")
+                break
+    except Exception:  # noqa: BLE001
+        pass
+    headers = {
+        "X-IG-App-ID": IG_APP_ID,
+        "X-Requested-With": "XMLHttpRequest",
+        "X-ASBD-ID": "359341",
+        "Accept": "*/*",
+    }
+    if csrf:
+        headers["X-CSRFToken"] = csrf
+    return headers
 
 
 def browser_fetch(driver, url: str, method: str = "GET", body: str | None = None) -> dict[str, Any]:
-    result = driver.execute_async_script(FETCH_JS, url, method, body)
-    status = result.get("status", 0)
-    text = result.get("text", "")
-    content_type = result.get("contentType", "")
-    if status >= 400 or (text.startswith("<!DOCTYPE") and "json" not in content_type.lower()):
-        logger.warning("Fetch %s returned HTTP %s (non-JSON): %s", url, status, text[:120])
-    payload = None
-    if text and not text.lstrip().startswith("<!DOCTYPE"):
-        try:
-            payload = json.loads(text.lstrip("for (;;);"))
-        except json.JSONDecodeError:
-            payload = None
-    return {"status": status, "text": text, "json": payload, "content_type": content_type}
+    return _browser_fetch(driver, url, method=method, body=body, headers=_ig_headers(driver))
 
 
 def get_profile_timeline(driver, username: str, delay_range: tuple[float, float] = (1.0, 2.0)) -> list[dict[str, Any]]:

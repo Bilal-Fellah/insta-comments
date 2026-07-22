@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 import re
-from dataclasses import dataclass
 from urllib.parse import urlparse
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -12,21 +11,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from core.human import human_delay, human_scroll, random_mouse_wander
+
 from .api import get_profile_timeline
 from .auth import dismiss_cookie_banners
 from .config import ScraperConfig
-from .human import human_delay, human_scroll, random_mouse_wander
-from .interceptors import drain_captured_responses, parse_json_body
+from .interceptor_config import drain_captured_responses, parse_json_body
+from core.models import PostRef
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class PostRef:
-    url: str
-    shortcode: str
-    media_id: str | None = None
-    metadata: dict | None = None
 
 
 def normalize_profile_url(url: str) -> str:
